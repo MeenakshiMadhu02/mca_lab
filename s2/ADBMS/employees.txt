@@ -1,0 +1,128 @@
+mysql> create table employees(empid int,name varchar(20),gender varchar(10),department varchar(20),education varchar(20),moj varchar(20),salary int);
+Query OK, 0 rows affected (0.78 sec)
+
+mysql> insert into employees values(100,'Ajay','male','engineering','doctoral','january',25);
+Query OK, 1 row affected (0.13 sec)
+
+mysql> insert into employees values(101,'Babloo','male','engineering','ug','february',23);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into employees values(103,'Chavi','female','HR','pg','march',15);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into employees values(104,'Dheeraj','male','HR','ug','january',12);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into employees values(105,'Elvina','female','marketing','ug','march',16);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from employees;
++-------+---------+--------+-------------+-----------+----------+--------+
+| empid | name    | gender | department  | education | moj      | salary |
++-------+---------+--------+-------------+-----------+----------+--------+
+|   100 | Ajay    | male   | engineering | doctoral  | january  |     25 |
+|   101 | Babloo  | male   | engineering | ug        | february |     23 |
+|   103 | Chavi   | female | HR          | pg        | march    |     15 |
+|   104 | Dheeraj | male   | HR          | ug        | january  |     12 |
+|   105 | Elvina  | female | marketing   | ug        | march    |     16 |
++-------+---------+--------+-------------+-----------+----------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select department,SUM(salary) from employees group by department;
++-------------+-------------+
+| department  | SUM(salary) |
++-------------+-------------+
+| engineering |          48 |
+| HR          |          27 |
+| marketing   |          16 |
++-------------+-------------+
+3 rows in set (0.06 sec)
+
+mysql> select department,SUM(salary) from employees group by department HAVING SUM(salary)>=20;
++-------------+-------------+
+| department  | SUM(salary) |
++-------------+-------------+
+| engineering |          48 |
+| HR          |          27 |
++-------------+-------------+
+2 rows in set (0.04 sec)
+
+mysql> select DISTINCT department from employees;
++-------------+
+| department  |
++-------------+
+| engineering |
+| HR          |
+| marketing   |
++-------------+
+3 rows in set (0.00 sec)
+
+mysql> select COUNT(salary) from employees;
++---------------+
+| COUNT(salary) |
++---------------+
+|             5 |
++---------------+
+1 row in set (0.02 sec)
+
+mysql> select * from employees where department="engineering" and education="doctoral";
++-------+------+--------+-------------+-----------+---------+--------+
+| empid | name | gender | department  | education | moj     | salary |
++-------+------+--------+-------------+-----------+---------+--------+
+|   100 | Ajay | male   | engineering | doctoral  | january |     25 |
++-------+------+--------+-------------+-----------+---------+--------+
+1 row in set (0.02 sec)
+
+mysql> select * from employees where department="engineering" or  education="doctoral";
++-------+--------+--------+-------------+-----------+----------+--------+
+| empid | name   | gender | department  | education | moj      | salary |
++-------+--------+--------+-------------+-----------+----------+--------+
+|   100 | Ajay   | male   | engineering | doctoral  | january  |     25 |
+|   101 | Babloo | male   | engineering | ug        | february |     23 |
++-------+--------+--------+-------------+-----------+----------+--------+
+2 rows in set (0.01 sec)
+
+mysql> select name as firstname,education as qualification from employees;
++-----------+---------------+
+| firstname | qualification |
++-----------+---------------+
+| Ajay      | doctoral      |
+| Babloo    | ug            |
+| Chavi     | pg            |
+| Dheeraj   | ug            |
+| Elvina    | ug            |
++-----------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from employee where name like 'A%';
+Empty set (0.03 sec)
+
+mysql> select * from employees where firstname like 'A%';
+ERROR 1054 (42S22): Unknown column 'firstname' in 'where clause'
+mysql> select * from employees where name like 'A%';
++-------+------+--------+-------------+-----------+---------+--------+
+| empid | name | gender | department  | education | moj     | salary |
++-------+------+--------+-------------+-----------+---------+--------+
+|   100 | Ajay | male   | engineering | doctoral  | january |     25 |
++-------+------+--------+-------------+-----------+---------+--------+
+1 row in set (0.00 sec)
+
+mysql> select department,sum(salary) from employees where education <> 'ug' group by department having sum(salary)>=20;
++-------------+-------------+
+| department  | sum(salary) |
++-------------+-------------+
+| engineering |          25 |
++-------------+-------------+
+1 row in set (0.00 sec)
+
+
+mysql> select department,sum(salary) from employees group by department having sum(salary)>=15 order by sum(salary) desc;
++-------------+-------------+
+| department  | sum(salary) |
++-------------+-------------+
+| engineering |          48 |
+| HR          |          27 |
+| marketing   |          16 |
++-------------+-------------+
+3 rows in set (0.00 sec)
+

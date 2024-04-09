@@ -1,0 +1,135 @@
+mysql> create table employee(empid int primary key,name varchar(20),department varchar(20),salary int);
+Query OK, 0 rows affected (0.26 sec)
+
+mysql> desc employee;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| empid      | int(11)     | NO   | PRI | NULL    |       |
+| name       | varchar(20) | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | NULL    |       |
+| salary     | int(11)     | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create table department(deptid int primary key,name varchar(20),hod varchar(20));
+Query OK, 0 rows affected (0.25 sec)
+
+mysql> desc department;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| deptid | int(11)     | NO   | PRI | NULL    |       |
+| name   | varchar(20) | YES  |     | NULL    |       |
+| hod    | varchar(20) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into employee values('101','neha','sales','3000');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into employee values('102','sneha','operation','3500');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into employee values('103','tara','sales','3000');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into employee values('104','hari','sales','4000');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from employee;
++-------+-------+------------+--------+
+| empid | name  | department | salary |
++-------+-------+------------+--------+
+|   101 | neha  | sales      |   3000 |
+|   102 | sneha | operation  |   3500 |
+|   103 | tara  | sales      |   3000 |
+|   104 | hari  | sales      |   4000 |
++-------+-------+------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> insert into department values('111','sales','dev');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into department values('112','operation','leya');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into department values('113','HR','jain');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from department;
++--------+-----------+------+
+| deptid | name      | hod  |
++--------+-----------+------+
+|    111 | sales     | dev  |
+|    112 | operation | leya |
+|    113 | HR        | jain |
++--------+-----------+------+
+3 rows in set (0.00 sec)
+
+mysql> update employee set department='111' where empid='101';
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee set department='112' where empid='102';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee set department='111' where empid='103';
+Query OK, 1 row affected (0.06 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee set department='113' where empid='104';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee;
++-------+-------+--------+------------+
+| empid | name  | salary | department |
++-------+-------+--------+------------+
+|   101 | neha  |   3000 |        111 |
+|   102 | sneha |   3500 |        112 |
+|   103 | tara  |   3000 |        111 |
+|   104 | hari  |   4000 |        113 |
++-------+-------+--------+------------+
+4 rows in set (0.00 sec)
+
+mysql> alter table employee add foreign key(department) references department(deptid);
+Query OK, 4 rows affected (0.86 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> desc employee;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| empid      | int(11)     | NO   | PRI | NULL    |       |
+| name       | varchar(20) | YES  |     | NULL    |       |
+| salary     | int(11)     | YES  |     | NULL    |       |
+| department | int(11)     | YES  | MUL | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select * from employee;
++-------+-------+--------+------------+
+| empid | name  | salary | department |
++-------+-------+--------+------------+
+|   101 | neha  |   3000 |        111 |
+|   102 | sneha |   3500 |        112 |
+|   103 | tara  |   3000 |        111 |
+|   104 | hari  |   4000 |        113 |
++-------+-------+--------+------------+
+4 rows in set (0.00 sec)
+
+mysql> delete from employee where empid='101';
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from employee;
++-------+-------+--------+------------+
+| empid | name  | salary | department |
++-------+-------+--------+------------+
+|   102 | sneha |   3500 |        112 |
+|   103 | tara  |   3000 |        111 |
+|   104 | hari  |   4000 |        113 |
++-------+-------+--------+------------+
+3 rows in set (0.00 sec)
+

@@ -1,0 +1,180 @@
+mysql> create table salesman(salesman_id int primary key,name varchar(20),city varchar(20),commi
+Query OK, 0 rows affected (0.25 sec)
+
+mysql> insert into salesman values(5001,'James Hoog','New York','0.15');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into salesman values(5002,'Nail Knite','Paris','0.13');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into salesman values(5005,'Pit Alex','London','0.11');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into salesman values(5006,'Mc Lyon','Paris','0.14');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into salesman values(5007,'Paul Adam','Rome','0.13');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into salesman values(5003,'Lauson Hem','San Jose','0.12');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from salesman;
++-------------+------------+----------+------------+
+| salesman_id | name       | city     | commission |
++-------------+------------+----------+------------+
+|        5001 | James Hoog | New York | 0.15       |
+|        5002 | Nail Knite | Paris    | 0.13       |
+|        5003 | Lauson Hem | San Jose | 0.12       |
+|        5005 | Pit Alex   | London   | 0.11       |
+|        5006 | Mc Lyon    | Paris    | 0.14       |
+|        5007 | Paul Adam  | Rome     | 0.13       |
++-------------+------------+----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> create view newyorkoff as select * from salesman where city="New York";
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> select * from newyorkoff;
++-------------+------------+----------+------------+
+| salesman_id | name       | city     | commission |
++-------------+------------+----------+------------+
+|        5001 | James Hoog | New York | 0.15       |
++-------------+------------+----------+------------+
+1 row in set (0.00 sec)
+
+mysql> create table customer(customer_id int primary key,cust_name varchar(20),city varchar(20),grade int,salesman_id int);
+Query OK, 0 rows affected (0.22 sec)
+
+mysql>  alter table customer add foreign key(salesman_id) references salesman(salesman_id);
+Query OK, 0 rows affected (0.67 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into customer values(3002,'Nick Rimando','New York',100,5001);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into customer values(3007,'Brad Davis','New York',200,5001);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into customer values(3005,'Graham Zusi','California',200,5002);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into customer values(3008,'Julian Green','London',300,5002);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into customer values(3004,'Fabian Johnson','Paris',300,5006);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into customer values(3009,'Geoff Cameron','Berlin',100,5003);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into customer values(3003,'Jozy Altidor','Moscow',200,5007);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into customer values(3001,'Brad Guzan','London',100,5005);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from customer;
++-------------+----------------+------------+-------+-------------+
+| customer_id | cust_name      | city       | grade | salesman_id |
++-------------+----------------+------------+-------+-------------+
+|        3001 | Brad Guzan     | London     |   100 |        5005 |
+|        3002 | Nick Rimando   | New York   |   100 |        5001 |
+|        3003 | Jozy Altidor   | Moscow     |   200 |        5007 |
+|        3004 | Fabian Johnson | Paris      |   300 |        5006 |
+|        3005 | Graham Zusi    | California |   200 |        5002 |
+|        3007 | Brad Davis     | New York   |   200 |        5001 |
+|        3008 | Julian Green   | London     |   300 |        5002 |
+|        3009 | Geoff Cameron  | Berlin     |   100 |        5003 |
++-------------+----------------+------------+-------+-------------+
+8 rows in set (0.00 sec)
+
+mysql> create view gradecount(grade,number) as select grade,count(*) from customer group by grade;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from gradecount;
++-------+--------+
+| grade | number |
++-------+--------+
+|   100 |      3 |
+|   200 |      3 |
+|   300 |      2 |
++-------+--------+
+3 rows in set (0.04 sec)
+
+mysql> create table `order`(ord_no int primary key,purch_amt float(50),ord_date DATE,customer_id int,salesman_id int);
+Query OK, 0 rows affected (0.24 sec)
+
+mysql>  alter table `order` add foreign key(salesman_id) references salesman(salesman_id);
+Query OK, 0 rows affected (0.72 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql>  alter table `order` add foreign key(customer_id) references customer(customer_id);
+Query OK, 0 rows affected (0.66 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into `order` values(7001,150.5,'2012-10-05',3005,5002);
+Query OK, 1 row affected (0.19 sec)
+
+mysql> insert into `order` values(7009,270.655,'2012-09-10',3001,5005);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into `order` values(7002,65.26,'2012-10-05',3002,5001);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into `order` values(7004,110.5,'2012-08-17',3009,5003);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into `order` values(7007,948.5,'2012-09-10',3005,5002);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from `order`;
++--------+-----------+------------+-------------+-------------+
+| ord_no | purch_amt | ord_date   | customer_id | salesman_id |
++--------+-----------+------------+-------------+-------------+
+|   7001 |     150.5 | 2012-10-05 |        3005 |        5002 |
+|   7002 |     65.26 | 2012-10-05 |        3002 |        5001 |
+|   7004 |     110.5 | 2012-08-17 |        3009 |        5003 |
+|   7007 |     948.5 | 2012-09-10 |        3005 |        5002 |
+|   7009 |   270.655 | 2012-09-10 |        3001 |        5005 |
++--------+-----------+------------+-------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> create view totalforday as select ord_date,count(distinct customer_id),avg(purch_amt),sum(purch_amt)from `order` group by ord_date;
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> select * from totalforday;
++------------+-----------------------------+----------------+----------------+
+| ord_date   | count(distinct customer_id) | avg(purch_amt) | sum(purch_amt) |
++------------+-----------------------------+----------------+----------------+
+| 2012-08-17 |                           1 |          110.5 |          110.5 |
+| 2012-09-10 |                           2 |       609.5775 |       1219.155 |
+| 2012-10-05 |                           2 |         107.88 |         215.76 |
++------------+-----------------------------+----------------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> create view sorder as select salesman_id,ord_no,customer_id from `order`
+where ord_date in('2012-08-17','2012-10-10');
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> select * from sorder;
++-------------+--------+-------------+
+| salesman_id | ord_no | customer_id |
++-------------+--------+-------------+
+|        5003 |   7004 |        3009 |
++-------------+--------+-------------+
+1 row in set (0.00 sec)
+
+mysql> create view elitsalesman as select b.ord_date,a.salesman_id,a.name from salesman a,`order` b where a.salesman_id=b.salesman_id and b.purch_amt=(select max(purch_amt) from `order` c where c.ord_date=b.ord_date);
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> select * from elitsalesman;
++------------+-------------+------------+
+| ord_date   | salesman_id | name       |
++------------+-------------+------------+
+| 2012-10-05 |        5002 | Nail Knite |
+| 2012-08-17 |        5003 | Lauson Hem |
+| 2012-09-10 |        5002 | Nail Knite |
++------------+-------------+------------+
+3 rows in set (0.02 sec)
+
