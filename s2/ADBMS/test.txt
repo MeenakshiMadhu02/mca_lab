@@ -1,0 +1,30 @@
+> use test
+switched to db test
+> db.createCollection("student")
+{ "ok" : 1 }
+> db.student.insert({rollno:101,name:"Alex",Branch:"MCA"})
+WriteResult({ "nInserted" : 1 })
+> db.student.insert({rollno:102,name:"Maya",Branch:"MCA"})
+WriteResult({ "nInserted" : 1 })
+> db.student.insert({rollno:101,name:"Niya",Branch:"BCA"})
+WriteResult({ "nInserted" : 1 })
+> db.student.find().pretty()
+{
+	"_id" : ObjectId("6618c545b3d33a955bf9f9d3"),
+	"rollno" : 101,
+	"name" : "Alex",
+	"Branch" : "MCA"
+}
+{
+	"_id" : ObjectId("6618c556b3d33a955bf9f9d4"),
+	"rollno" : 102,
+	"name" : "Maya",
+	"Branch" : "MCA"
+}
+{
+	"_id" : ObjectId("6618c57fb3d33a955bf9f9d5"),
+	"rollno" : 101,
+	"name" : "Niya",
+	"Branch" : "BCA"
+}
+
