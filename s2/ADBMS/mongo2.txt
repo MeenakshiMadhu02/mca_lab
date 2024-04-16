@@ -1,0 +1,54 @@
+> use ProductCatalog
+switched to db ProductCatalog
+> db.createCollection("Products")
+{ "ok" : 1 }
+> db.Products.insertMany([
+... {"ProductID":1,"ProductName":"Laptop","Price":1000,"Quantity":20},
+... {"ProductID":2,"ProductName":"Smartphone","Price":500,"Quantity":30},
+... ])
+{
+	"acknowledged" : true,
+	"insertedIds" : [
+		ObjectId("661511182db8bae31a30128b"),
+		ObjectId("661511182db8bae31a30128c")
+	]
+}
+> db.Products.find().pretty()
+{
+	"_id" : ObjectId("661511182db8bae31a30128b"),
+	"ProductID" : 1,
+	"ProductName" : "Laptop",
+	"Price" : 1000,
+	"Quantity" : 20
+}
+{
+	"_id" : ObjectId("661511182db8bae31a30128c"),
+	"ProductID" : 2,
+	"ProductName" : "Smartphone",
+	"Price" : 500,
+	"Quantity" : 30
+}
+> db.Products.updateOne(
+... {"ProductName":"Laptop"},
+... {$inc:{"Quantity":10}}
+... )
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+> db.Products.find({"ProductName":"Laptop"}).pretty()
+{
+	"_id" : ObjectId("661511182db8bae31a30128b"),
+	"ProductID" : 1,
+	"ProductName" : "Laptop",
+	"Price" : 1000,
+	"Quantity" : 30
+}
+> db.Products.deleteOne({"ProductName":"Smartphone"})
+{ "acknowledged" : true, "deletedCount" : 1 }
+> db.Products.find().pretty()
+{
+	"_id" : ObjectId("661511182db8bae31a30128b"),
+	"ProductID" : 1,
+	"ProductName" : "Laptop",
+	"Price" : 1000,
+	"Quantity" : 30
+}
+
