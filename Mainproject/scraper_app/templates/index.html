@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Scraper</title>
+</head>
+<body>
+    <h1>Web Scraper</h1>
+
+    <form method="POST">
+        <label for="url">URL:</label>
+        <input type="url" name="url" id="url" required>
+        <button type="submit">Scrape</button>
+    </form>
+
+    <div id="result"></div>
+    <div id="loading" style="display: none;">Loading...</div>  <script>
+        const form = document.querySelector('form');
+        const resultDiv = document.getElementById('result');
+        const loadingDiv = document.getElementById('loading'); // Get loading div
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const url = document.getElementById('url').value;
+
+            loadingDiv.style.display = 'block'; // Show loading indicator
+            resultDiv.innerHTML = ''; // Clear previous results
+
+            try {
+                const response = await fetch('/', {
+                    method: 'POST',
+                    body: new URLSearchParams({ url }),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Error scraping URL');
+                }
+
+                const data = await response.json();
+
+                // 1. Create a hidden <a> element
+                const link = document.createElement('a');
+                link.href = data.pdf_url;
+                link.download = data.pdf_url.substring(data.pdf_url.lastIndexOf('/') + 1); // Set filename
+                link.style.display = 'none'; // Hide the link
+                document.body.appendChild(link);
+
+                // 2. Programmatically click the link to trigger the download
+                link.click();
+
+                // 3. Remove the link from the DOM
+                document.body.removeChild(link);
+
+                resultDiv.textContent = 'PDF downloaded successfully!'; // Success message
+
+            } catch (error) {
+                resultDiv.textContent = error.message;
+            } finally {
+                loadingDiv.style.display = 'none'; // Hide loading indicator
+            }
+        });
+    </script>
+</body>
+</html>
